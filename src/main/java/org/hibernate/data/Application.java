@@ -16,7 +16,7 @@ public class Application {
 		user.setCreatedBy("amaya8");
 		user.setCreatedDate(LocalDateTime.now());
 		user.setEmailAddress("kmb385@yahoo.com");
-		user.setFirstName("odin");
+		user.setFirstName("Generation Property Access");
 		user.setLastName("Bowersox");
 		user.setLastUpdatedBy("odin8");
 		user.setLastUpdatedDate(LocalDateTime.now().plusDays(1));

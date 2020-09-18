@@ -2,6 +2,7 @@ package org.hibernate.data.entities;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,14 @@ import javax.persistence.Table;
  * @Table(name="[nombre-tabla]") indica con que tabla va tener relacion
  * @Id: Indica que este campo sera la clave primaria
  * @GeneratedValue: Indica la forma en que se genera el autoincremento para tu llave primaria
- * @Column: Indica a que columna de la tabla hace referencia
+ * @Column: Indica a que columna de la tabla hace referencia,tambien en cada insert o en cada update en ocasiones vamos 
+ * a necesitar que algunas campos no sean insertado  o actualizados pra eso tenemos la propiedad
+ * GenerationType.SEQUENCE =  se usa para base de datos oracle ya que
+ * @Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="user_seq")
+	@Sequencegenerator(name="user_seq",sequenceName="USER_ID_SEQ")
+	@Column(name="USER_ID")
+	private Long userId;
  */
 @Entity 
 @Table(name="FINANCES_USER")
@@ -30,10 +38,12 @@ public class User {
 	@Column(name="FIRST_NAME")
 	private String firstName;
 	
-	@Column(name="LAST_NAME")
+	@Basic
+	@Column(name="LAST_NAME",nullable=false)
 	private String lastName;
 	
-	@Column(name="BIRTH_DATE")
+	//nullable=false indica que este campo no debe de ser nulo tambien se puede poner la anotacion @Basic
+	@Column(name="BIRTH_DATE",nullable=false)
 	private LocalDateTime birthDate;
 	
 	@Column(name="EMAIL_ADDRESS")
@@ -45,10 +55,12 @@ public class User {
 	@Column(name="LAST_UPDATED_BY")
 	private String lastUpdatedBy;
 	
-	@Column(name="CREATED_DATE")
+	//updatable=false cuando se haga un update no se tomara en cuenta este campo
+	@Column(name="CREATED_DATE",updatable=false)
 	private LocalDateTime createdDate;
 	
-	@Column(name="CREATED_BY")
+	//updatable=false cuando se haga un update no se tomara en cuenta este campo
+	@Column(name="CREATED_BY",updatable = false)
 	private String createdBy;
 	
 	public Long getUserId() {

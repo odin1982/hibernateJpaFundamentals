@@ -5,14 +5,17 @@ import java.time.LocalDateTime;
 import org.hibernate.Session;
 import org.hibernate.data.entities.User;
 
-public class Application {
+public class ApplicationUsingNullable {
 
 	public static void main(String[] args) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.getTransaction().begin();
 		
 		User user = new User();
-		user.setBirthDate(LocalDateTime.now());
+		// si no usas nullable se lanazara una exception como esta  org.hibernate.exception.ConstraintViolationException
+		// cuando tienes nullable = false se lanzara la siguiente exception de hibernate
+		//  org.hibernate.PropertyValueException: not-null property references a null or transient value : org.hibernate.data.entities.User.birthDate
+		user.setBirthDate(null);
 		user.setCreatedBy("amaya8");
 		user.setCreatedDate(LocalDateTime.now());
 		user.setEmailAddress("guillermo@yahoo.com");
@@ -24,13 +27,6 @@ public class Application {
 		
 		session.save(user);
 		session.getTransaction().commit();
-		
-		session.getTransaction().begin();
-		User dbUser = (User)session.get(User.class, user.getUserId());
-		dbUser.setFirstName("Joe");
-		session.update(dbUser);
-		session.getTransaction().commit();
-		
 		session.close();
 	}
 

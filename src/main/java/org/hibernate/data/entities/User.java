@@ -2,14 +2,19 @@ package org.hibernate.data.entities;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Formula;
 
 /**
  * 
@@ -26,6 +31,7 @@ import javax.persistence.Transient;
 	@Sequencegenerator(name="user_seq",sequenceName="USER_ID_SEQ")
 	@Column(name="USER_ID")
 	private Long userId;
+	@Formula = no spermite ejecutar formulas de sql para calcular algun campo
  */
 @Entity 
 @Table(name="FINANCES_USER")
@@ -66,6 +72,14 @@ public class User {
 	
 	@Transient
 	private boolean valid;
+	
+	@Formula("lower(datediff(curdate(),birth_date)/365)")
+	private int age;
+	
+	@Embedded
+	@AttributeOverrides({@AttributeOverride(name="addressLine1",column=@Column(name="USER_ADDRESS_LINE_1")),
+						 @AttributeOverride(name="addressLine2",column=@Column(name="USER_ADDRESS_LINE_2"))})
+	private Address address;
 	
 	public Long getUserId() {
 		return userId;
@@ -126,6 +140,18 @@ public class User {
 	}
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 	
 }

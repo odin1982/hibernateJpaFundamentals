@@ -15,12 +15,10 @@ public class Application {
 			
 			session.getTransaction().begin();
 			Bank bank = getBankObject();
+			bank.getContacts().add("Jorge");
+			bank.getContacts().add("Alfonso");
 			session.save(bank);
-			
-			User user = getUserObject();
-			user.setAddress(getAddressObject());
-			session.save(user);
-			
+		
 			session.getTransaction().commit();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -58,8 +56,8 @@ public class Application {
 	
 	public static Bank getBankObject() {
 		Bank bank = new Bank();
-		bank.setName("Federal Trust");
-		bank.setCreatedBy("Alfredo Talavera");
+		bank.setName("Banamex");
+		bank.setCreatedBy("Jorge Ramirez");
 		bank.setAddressType("No lo se");
 		bank.setCreatedDate(LocalDateTime.now());
 		bank.setIsInternational(1);

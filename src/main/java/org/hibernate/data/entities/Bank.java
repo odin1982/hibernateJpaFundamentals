@@ -1,13 +1,18 @@
 package org.hibernate.data.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -42,6 +47,11 @@ public class Bank {
 	
 	@Column(name = "ADDRESS_TYPE")
 	private String addressType;
+	
+	@ElementCollection
+	@CollectionTable(name="BANK_CONTACT",joinColumns=@JoinColumn(name="BANK_ID"))
+	@Column(name="NAME")
+	private List<String> contacts = new ArrayList<String>();
 
 	
 	public Long getBankId() {
@@ -114,6 +124,14 @@ public class Bank {
 
 	public void setAddressType(String addressType) {
 		this.addressType = addressType;
+	}
+
+	public List<String> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(List<String> contacts) {
+		this.contacts = contacts;
 	}
 
 }

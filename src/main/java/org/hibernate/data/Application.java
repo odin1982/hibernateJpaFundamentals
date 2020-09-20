@@ -15,8 +15,8 @@ public class Application {
 			
 			session.getTransaction().begin();
 			Bank bank = getBankObject();
-			bank.getContacts().add("Jorge");
-			bank.getContacts().add("Alfonso");
+			bank.getContacts().put("MANAGER","Joe");
+			bank.getContacts().put("TELLER","Mary");
 			session.save(bank);
 		
 			session.getTransaction().commit();

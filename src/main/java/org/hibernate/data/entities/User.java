@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -46,6 +47,10 @@ public class User {
 	@Column(name="USER_ID")
 	private Long userId;
 	
+	//user es el atributo user de Credential
+	@OneToOne(mappedBy = "user")
+	private Credential credential;
+		
 	@Column(name="FIRST_NAME")
 	private String firstName;
 	
@@ -85,6 +90,8 @@ public class User {
 	@AttributeOverrides({@AttributeOverride(name="addressLine1",column=@Column(name="USER_ADDRESS_LINE_1")),
 						 @AttributeOverride(name="addressLine2",column=@Column(name="USER_ADDRESS_LINE_2"))})
 	private List<Address> address = new ArrayList<Address>();
+	
+
 	
 	public Long getUserId() {
 		return userId;
@@ -157,6 +164,12 @@ public class User {
 	}
 	public void setAddress(List<Address> address) {
 		this.address = address;
+	}
+	public Credential getCredential() {
+		return credential;
+	}
+	public void setCredential(Credential credential) {
+		this.credential = credential;
 	}
 	
 	

@@ -15,13 +15,18 @@ public class Application {
 		try {
 			
 			session.getTransaction().begin();
+			
 			User user = getUserObject();
 			
 			Credential credential = getCredentialObject();
 			credential.setUser(user);
-			session.save(credential);
 			
+			session.save(credential);
 			session.getTransaction().commit();
+			
+			User dbUser = session.get(User.class, credential.getUser().getUserId());
+			System.out.println(dbUser.getFirstName());
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {

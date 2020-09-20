@@ -11,5 +11,6 @@
 		<mapping class="org.hibernate.data.entities.User" />
 		<mapping class="org.hibernate.data.entities.TimeTest" />
 		<mapping class="org.hibernate.data.entities.Bank" />
+		<mapping class="org.hibernate.data.entities.Credential"/>
 	</session-factory>
 </hibernate-configuration>

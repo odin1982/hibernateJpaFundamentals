@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.Session;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
+import org.hibernate.data.entities.Credential;
 import org.hibernate.data.entities.User;
 
 public class Application {
@@ -16,14 +17,10 @@ public class Application {
 			session.getTransaction().begin();
 			User user = getUserObject();
 			
-			Address address = getAddressObject();
-			Address address2 = getAddressObject2();
+			Credential credential = getCredentialObject();
+			credential.setUser(user);
+			session.save(credential);
 			
-			user.getAddress().add(address);
-			user.getAddress().add(address2);
-			
-			session.save(user);
-		
 			session.getTransaction().commit();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -58,13 +55,13 @@ public class Application {
 	
 	public static User getUserObject() {
 		User user = new User();
-		user.setFirstName("Guillermo");
-		user.setLastName("Ochoa");
+		user.setFirstName("Armando");
+		user.setLastName("Rocha");
 		user.setBirthDate(LocalDateTime.now());
-		user.setEmailAddress("meme@gmail.com");
-		user.setLastUpdatedBy("me");
+		user.setEmailAddress("armando@gmail.com");
+		user.setLastUpdatedBy("odin");
 		user.setLastUpdatedDate(LocalDateTime.now());
-		user.setCreatedBy("me");
+		user.setCreatedBy("odin");
 		user.setCreatedDate(LocalDateTime.now());
 		
 		return user;
@@ -82,5 +79,14 @@ public class Application {
 		bank.setAddress(getAddressObject());
 		
 		return bank;
+	}
+	
+	
+	public static Credential getCredentialObject() {
+		Credential credential = new Credential();
+		credential.setPassword("cuak");
+		credential.setUsername("vikingo");
+		
+		return credential;
 	}
 }

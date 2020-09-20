@@ -14,10 +14,15 @@ public class Application {
 		try {
 			
 			session.getTransaction().begin();
-			Bank bank = getBankObject();
-			bank.getContacts().put("MANAGER","Joe");
-			bank.getContacts().put("TELLER","Mary");
-			session.save(bank);
+			User user = getUserObject();
+			
+			Address address = getAddressObject();
+			Address address2 = getAddressObject2();
+			
+			user.getAddress().add(address);
+			user.getAddress().add(address2);
+			
+			session.save(user);
 		
 			session.getTransaction().commit();
 		}catch(Exception e) {
@@ -31,11 +36,22 @@ public class Application {
 	
 	public static Address getAddressObject() {
 		Address address = new Address();
-		address.setAddressLine1("Av Juarez Nte no.11");
-		address.setAddressLine2("Condominio O-32");
-		address.setCity("Tizayuca");
+		address.setAddressLine1("Av Bneito Juarez Nte no.11");
+		address.setAddressLine2("Rosales O-32");
+		address.setCity("Ecatepec");
 		address.setState("HG");
-		address.setZipCode("43800");
+		address.setZipCode("55100");
+		
+		return address;
+	}
+	
+	public static Address getAddressObject2() {
+		Address address = new Address();
+		address.setAddressLine1("Av San Antonio Nte no.11");
+		address.setAddressLine2("Ejercito Nacional O-32");
+		address.setCity("Pachuca");
+		address.setState("HG");
+		address.setZipCode("43820");
 		
 		return address;
 	}

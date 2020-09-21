@@ -1,11 +1,16 @@
 package org.hibernate.data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.data.entities.Account;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
 import org.hibernate.data.entities.Credential;
+import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
 
 public class Application {
@@ -15,18 +20,12 @@ public class Application {
 		try {
 			
 			session.getTransaction().begin();
+			Account account = getAccountObject();
+			account.setTransactions(getTransactionsList());
+			session.save(account);
 			
-			User user = getUserObject();
 			
-			Credential credential = getCredentialObject();
-			credential.setUser(user);
-			
-			session.save(credential);
 			session.getTransaction().commit();
-			
-			User dbUser = session.get(User.class, credential.getUser().getUserId());
-			System.out.println(dbUser.getFirstName());
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -86,12 +85,61 @@ public class Application {
 		return bank;
 	}
 	
-	
 	public static Credential getCredentialObject() {
 		Credential credential = new Credential();
 		credential.setPassword("cuak");
 		credential.setUsername("vikingo");
 		
 		return credential;
+	}
+	
+	public static List<Transaction> getTransactionsList() {
+		ArrayList<Transaction> listTransactions = new ArrayList<>();
+		
+		Transaction t = new Transaction();
+		t.setAmount(23.5);
+		t.setClosingBalance(56.89);
+		t.setCreatedBy("odin");
+		t.setCreatedDate(LocalDateTime.now());
+		t.setInitialBalance(43.67);
+		t.setLastUpdatedBy("amaya");
+		t.setLastUpdatedDate(LocalDateTime.now());
+		t.setNotes("no exiset Nota");
+		t.setTitle("T-101");
+		t.setTransactionType("TypeTransaction");
+		
+		Transaction t2 = new Transaction();
+		t2.setAmount(73.5);
+		t2.setClosingBalance(76.89);
+		t2.setCreatedBy("odin2");
+		t2.setCreatedDate(LocalDateTime.now());
+		t2.setInitialBalance(73.67);
+		t2.setLastUpdatedBy("amaya2");
+		t2.setLastUpdatedDate(LocalDateTime.now());
+		t2.setNotes("no exiset Nota 2");
+		t2.setTitle("T-1012");
+		t2.setTransactionType("TypeTransaction2");
+		
+		listTransactions.add(t);
+		listTransactions.add(t2);
+		
+		return listTransactions;
+	}
+	
+	public static Account getAccountObject() {
+		Account a = new Account();
+		a.setAccountType("accountType");
+		a.setBankId(1L);
+		a.setCloseDate(LocalDate.now());
+		a.setCreatedBy("odin");
+		a.setCreatedDate(LocalDateTime.now());
+		a.setCurrentBalance(20.36);
+		a.setInitialBalance(88.90);
+		a.setLastUpdatedBy("amaya");
+		a.setLastUpdatedDate(LocalDateTime.now());
+		a.setName("nameAccount");
+		a.setOpenDate(LocalDate.now());
+		
+		return a;
 	}
 }

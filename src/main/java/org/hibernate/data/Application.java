@@ -21,11 +21,15 @@ public class Application {
 			
 			session.getTransaction().begin();
 			Account account = getAccountObject();
-			account.setTransactions(getTransactionsList());
+			account.getTransactions().add(getTransactionObject(account));
+			account.getTransactions().add(getTransactionObject2(account));
 			session.save(account);
 			
 			
 			session.getTransaction().commit();
+			
+			Transaction dbTransaction = (Transaction)session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
+			System.out.println(dbTransaction.getAccount().getName());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -142,4 +146,42 @@ public class Application {
 		
 		return a;
 	}
+	
+	private static Transaction getTransactionObject(Account account) {
+		Transaction t = new Transaction();
+		t.setAccount(account);
+		t.setAmount(23.5);
+		t.setClosingBalance(56.89);
+		t.setCreatedBy("odin");
+		t.setCreatedDate(LocalDateTime.now());
+		t.setInitialBalance(43.67);
+		t.setLastUpdatedBy("amaya");
+		t.setLastUpdatedDate(LocalDateTime.now());
+		t.setNotes("no exiset Nota");
+		t.setTitle("T-101");
+		t.setTransactionType("TypeTransaction");
+		
+		
+		return t;
+	}
+	
+	private static Transaction getTransactionObject2(Account account) {
+		Transaction t = new Transaction();
+		t.setAccount(account);
+		t.setAmount(99.9);
+		t.setClosingBalance(99.99);
+		t.setCreatedBy("sarai");
+		t.setCreatedDate(LocalDateTime.now());
+		t.setInitialBalance(88.88);
+		t.setLastUpdatedBy("amaya");
+		t.setLastUpdatedDate(LocalDateTime.now());
+		t.setNotes("no exiset Nota");
+		t.setTitle("T-101");
+		t.setTransactionType("TypeTransaction");
+		
+		
+		return t;
+	}
+	
+	
 }

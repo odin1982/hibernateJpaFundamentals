@@ -1,5 +1,6 @@
 package org.hibernate.data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.data.entities.Account;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
+import org.hibernate.data.entities.Budget;
 import org.hibernate.data.entities.Credential;
 import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
@@ -20,16 +22,25 @@ public class Application {
 		try {
 			
 			session.getTransaction().begin();
-			Account account = getAccountObject();
-			account.getTransactions().add(getTransactionObject(account));
-			account.getTransactions().add(getTransactionObject2(account));
-			session.save(account);
 			
+			Account account = getAccountObject();
+			Account account2 = getAccountObject();
+			User user = getUserObject();
+			User user2 = getUserObject();
+			
+			account.getUsers().add(user);
+			account.getUsers().add(user2);
+			account2.getUsers().add(user);
+			account2.getUsers().add(user2);
+			
+			session.save(account);
+			session.save(account2);
 			
 			session.getTransaction().commit();
 			
-			Transaction dbTransaction = (Transaction)session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
-			System.out.println(dbTransaction.getAccount().getName());
+			Account dbAccount =(Account) session.get(Account.class, account.getAccountId());
+			System.out.println(dbAccount.getUsers().iterator().next().getEmailAddress());
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -71,6 +82,11 @@ public class Application {
 		user.setLastUpdatedDate(LocalDateTime.now());
 		user.setCreatedBy("odin");
 		user.setCreatedDate(LocalDateTime.now());
+		
+//		List<Address> addresses = new ArrayList<>();
+//		addresses.add(getAddressObject());
+//		addresses.add(getAddressObject2());
+//		user.setAddress(addresses);
 		
 		return user;
 	}

@@ -14,5 +14,6 @@
 		<mapping class="org.hibernate.data.entities.Credential"/>
 		<mapping class="org.hibernate.data.entities.Account"/>
 		<mapping class="org.hibernate.data.entities.Transaction"/>
+		<mapping class="org.hibernate.data.entities.Budget"/>
 	</session-factory>
 </hibernate-configuration>

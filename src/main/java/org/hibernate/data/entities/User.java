@@ -2,11 +2,14 @@ package org.hibernate.data.entities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -15,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -46,6 +50,9 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="USER_ID")
 	private Long userId;
+	
+	@ManyToMany(cascade= CascadeType.ALL,mappedBy = "users")
+	private Set<Account> accounts = new HashSet<Account>();
 	
 	//user es el atributo user de Credential
 	@OneToOne(mappedBy = "user")
@@ -170,6 +177,12 @@ public class User {
 	}
 	public void setCredential(Credential credential) {
 		this.credential = credential;
+	}
+	public Set<Account> getAccounts() {
+		return accounts;
+	}
+	public void setAccounts(Set<Account> accounts) {
+		this.accounts = accounts;
 	}
 	
 	

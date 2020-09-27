@@ -1,6 +1,5 @@
 package org.hibernate.data;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.data.entities.Account;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
-import org.hibernate.data.entities.Budget;
 import org.hibernate.data.entities.Credential;
 import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
@@ -19,33 +17,21 @@ public class Application {
 	
 	public static void main(String[] args) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		
 		try {
 			
-			session.getTransaction().begin();
+			org.hibernate.Transaction transaction = session.beginTransaction();
+			Bank bank = (Bank)session.load(Bank.class, 123L);
+			System.out.println("Method executed");
+			System.out.println(bank.getName());
 			
-			Account account = getAccountObject();
-			Account account2 = getAccountObject();
-			User user = getUserObject();
-			User user2 = getUserObject();
 			
-			account.getUsers().add(user);
-			account.getUsers().add(user2);
-			user.getAccounts().add(account);
-			user2.getAccounts().add(account);
+			Bank bank2 = (Bank)session.get(Bank.class, 1L);
+			System.out.println("Method executed");
+			System.out.println(bank2.getName());
 			
-			account2.getUsers().add(user);
-			account2.getUsers().add(user2);
-			user.getAccounts().add(account2);
-			user2.getAccounts().add(account2);
-			
-			session.save(user);
-			session.save(user2);
-			
-			session.getTransaction().commit();
-			
-			User dbUser =(User) session.get(User.class, user.getUserId());
-			System.out.println(dbUser.getAccounts().iterator().next().getName());
-			
+			transaction.commit();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -122,16 +108,16 @@ public class Application {
 		ArrayList<Transaction> listTransactions = new ArrayList<>();
 		
 		Transaction t = new Transaction();
-		t.setAmount(23.5);
-		t.setClosingBalance(56.89);
-		t.setCreatedBy("odin");
+		t.setAmount(11.1);
+		t.setClosingBalance(11.11);
+		t.setCreatedBy("odin "+LocalDateTime.now());
 		t.setCreatedDate(LocalDateTime.now());
-		t.setInitialBalance(43.67);
-		t.setLastUpdatedBy("amaya");
+		t.setInitialBalance(11.11);
+		t.setLastUpdatedBy("amaya "+LocalDateTime.now());
 		t.setLastUpdatedDate(LocalDateTime.now());
-		t.setNotes("no exiset Nota");
-		t.setTitle("T-101");
-		t.setTransactionType("TypeTransaction");
+		t.setNotes("nota "+LocalDateTime.now());
+		t.setTitle("titulo "+LocalDateTime.now());
+		t.setTransactionType("transactionType"+LocalDateTime.now());
 		
 		Transaction t2 = new Transaction();
 		t2.setAmount(73.5);
@@ -153,16 +139,16 @@ public class Application {
 	
 	public static Account getAccountObject() {
 		Account a = new Account();
-		a.setAccountType("accountType");
+		a.setAccountType("Perfiles");
 		a.setBankId(1L);
 		a.setCloseDate(LocalDate.now());
-		a.setCreatedBy("odin");
+		a.setCreatedBy("odin "+LocalDate.now());
 		a.setCreatedDate(LocalDateTime.now());
-		a.setCurrentBalance(20.36);
-		a.setInitialBalance(88.90);
-		a.setLastUpdatedBy("amaya");
+		a.setCurrentBalance(11.11);
+		a.setInitialBalance(11.11);
+		a.setLastUpdatedBy("sarai");
 		a.setLastUpdatedDate(LocalDateTime.now());
-		a.setName("nameAccount");
+		a.setName("Perfiles Citirewards");
 		a.setOpenDate(LocalDate.now());
 		
 		return a;
@@ -170,17 +156,16 @@ public class Application {
 	
 	private static Transaction getTransactionObject(Account account) {
 		Transaction t = new Transaction();
-		t.setAccount(account);
-		t.setAmount(23.5);
-		t.setClosingBalance(56.89);
-		t.setCreatedBy("odin");
+		t.setAmount(11.1);
+		t.setClosingBalance(11.11);
+		t.setCreatedBy("odin "+LocalDateTime.now());
 		t.setCreatedDate(LocalDateTime.now());
-		t.setInitialBalance(43.67);
-		t.setLastUpdatedBy("amaya");
+		t.setInitialBalance(11.11);
+		t.setLastUpdatedBy("amaya "+LocalDateTime.now());
 		t.setLastUpdatedDate(LocalDateTime.now());
-		t.setNotes("no exiset Nota");
-		t.setTitle("T-101");
-		t.setTransactionType("TypeTransaction");
+		t.setNotes("nota "+LocalDateTime.now());
+		t.setTitle("titulo "+LocalDateTime.now());
+		t.setTransactionType("transactionType"+LocalDateTime.now());
 		
 		
 		return t;

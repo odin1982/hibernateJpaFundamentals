@@ -5,7 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 import org.hibernate.data.entities.Account;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
@@ -14,44 +18,34 @@ import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
 
 public class Application {
-	
-	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
 
-		
-		try {
-			
-			org.hibernate.Transaction transaction = session.beginTransaction();
-			Bank bank = (Bank)session.load(Bank.class, 123L);
-			System.out.println("Method executed");
-			System.out.println(bank.getName());
-			
-			
-			Bank bank2 = (Bank)session.get(Bank.class, 1L);
-			System.out.println("Method executed");
-			System.out.println(bank2.getName());
-			
-			transaction.commit();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			session.close();
-			HibernateUtil.getSessionFactory().close();
-		}
+	public static void main(String[] args) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("infinite-finances");
+		EntityManager em = emf.createEntityManager();
+
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+
+		Bank bank = getBankObject();
+		em.persist(bank);
+
+		tx.commit();
+
+		em.close();
+		emf.close();
 	}
-	
-	
+
 	public static Address getAddressObject() {
 		Address address = new Address();
-		address.setAddressLine1("Av Bneito Juarez Nte no.11");
+		address.setAddressLine1("Av Benito Juarez Nte no.11");
 		address.setAddressLine2("Rosales O-32");
 		address.setCity("Ecatepec");
 		address.setState("HG");
 		address.setZipCode("55100");
-		
+
 		return address;
 	}
-	
+
 	public static Address getAddressObject2() {
 		Address address = new Address();
 		address.setAddressLine1("Av San Antonio Nte no.11");
@@ -59,10 +53,10 @@ public class Application {
 		address.setCity("Pachuca");
 		address.setState("HG");
 		address.setZipCode("43820");
-		
+
 		return address;
 	}
-	
+
 	public static User getUserObject() {
 		User user = new User();
 		user.setFirstName("Armando");
@@ -73,52 +67,52 @@ public class Application {
 		user.setLastUpdatedDate(LocalDateTime.now());
 		user.setCreatedBy("odin");
 		user.setCreatedDate(LocalDateTime.now());
-		
+
 //		List<Address> addresses = new ArrayList<>();
 //		addresses.add(getAddressObject());
 //		addresses.add(getAddressObject2());
 //		user.setAddress(addresses);
-		
+
 		return user;
 	}
-	
+
 	public static Bank getBankObject() {
 		Bank bank = new Bank();
 		bank.setName("Banamex");
 		bank.setCreatedBy("Jorge Ramirez");
-		bank.setAddressType("No lo se");
+		bank.setAddressType("Av Juarez Norte No.11");
 		bank.setCreatedDate(LocalDateTime.now());
-		bank.setIsInternational(1);
-		bank.setLastUpdatedBy("Odin Araujo");
+		bank.setIsInternational(0);
+		bank.setLastUpdatedBy("Odin Araujo " + LocalDateTime.now());
 		bank.setLastUpdatedDate(LocalDateTime.now());
 		bank.setAddress(getAddressObject());
-		
+
 		return bank;
 	}
-	
+
 	public static Credential getCredentialObject() {
 		Credential credential = new Credential();
 		credential.setPassword("cuak");
 		credential.setUsername("vikingo");
-		
+
 		return credential;
 	}
-	
+
 	public static List<Transaction> getTransactionsList() {
 		ArrayList<Transaction> listTransactions = new ArrayList<>();
-		
+
 		Transaction t = new Transaction();
 		t.setAmount(11.1);
 		t.setClosingBalance(11.11);
-		t.setCreatedBy("odin "+LocalDateTime.now());
+		t.setCreatedBy("odin " + LocalDateTime.now());
 		t.setCreatedDate(LocalDateTime.now());
 		t.setInitialBalance(11.11);
-		t.setLastUpdatedBy("amaya "+LocalDateTime.now());
+		t.setLastUpdatedBy("amaya " + LocalDateTime.now());
 		t.setLastUpdatedDate(LocalDateTime.now());
-		t.setNotes("nota "+LocalDateTime.now());
-		t.setTitle("titulo "+LocalDateTime.now());
-		t.setTransactionType("transactionType"+LocalDateTime.now());
-		
+		t.setNotes("nota " + LocalDateTime.now());
+		t.setTitle("titulo " + LocalDateTime.now());
+		t.setTransactionType("transactionType" + LocalDateTime.now());
+
 		Transaction t2 = new Transaction();
 		t2.setAmount(73.5);
 		t2.setClosingBalance(76.89);
@@ -130,19 +124,19 @@ public class Application {
 		t2.setNotes("no exiset Nota 2");
 		t2.setTitle("T-1012");
 		t2.setTransactionType("TypeTransaction2");
-		
+
 		listTransactions.add(t);
 		listTransactions.add(t2);
-		
+
 		return listTransactions;
 	}
-	
+
 	public static Account getAccountObject() {
 		Account a = new Account();
 		a.setAccountType("Perfiles");
 		a.setBankId(1L);
 		a.setCloseDate(LocalDate.now());
-		a.setCreatedBy("odin "+LocalDate.now());
+		a.setCreatedBy("odin " + LocalDate.now());
 		a.setCreatedDate(LocalDateTime.now());
 		a.setCurrentBalance(11.11);
 		a.setInitialBalance(11.11);
@@ -150,27 +144,26 @@ public class Application {
 		a.setLastUpdatedDate(LocalDateTime.now());
 		a.setName("Perfiles Citirewards");
 		a.setOpenDate(LocalDate.now());
-		
+
 		return a;
 	}
-	
+
 	private static Transaction getTransactionObject(Account account) {
 		Transaction t = new Transaction();
 		t.setAmount(11.1);
 		t.setClosingBalance(11.11);
-		t.setCreatedBy("odin "+LocalDateTime.now());
+		t.setCreatedBy("odin " + LocalDateTime.now());
 		t.setCreatedDate(LocalDateTime.now());
 		t.setInitialBalance(11.11);
-		t.setLastUpdatedBy("amaya "+LocalDateTime.now());
+		t.setLastUpdatedBy("amaya " + LocalDateTime.now());
 		t.setLastUpdatedDate(LocalDateTime.now());
-		t.setNotes("nota "+LocalDateTime.now());
-		t.setTitle("titulo "+LocalDateTime.now());
-		t.setTransactionType("transactionType"+LocalDateTime.now());
-		
-		
+		t.setNotes("nota " + LocalDateTime.now());
+		t.setTitle("titulo " + LocalDateTime.now());
+		t.setTransactionType("transactionType" + LocalDateTime.now());
+
 		return t;
 	}
-	
+
 	private static Transaction getTransactionObject2(Account account) {
 		Transaction t = new Transaction();
 		t.setAccount(account);
@@ -184,10 +177,8 @@ public class Application {
 		t.setNotes("no exiset Nota");
 		t.setTitle("T-101");
 		t.setTransactionType("TypeTransaction");
-		
-		
+
 		return t;
 	}
-	
-	
+
 }

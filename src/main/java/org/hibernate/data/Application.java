@@ -20,28 +20,36 @@ import org.hibernate.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("infinite-finances");
-		EntityManager em = emf.createEntityManager();
-
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-
-		Bank bank = getBankObject();
-		em.persist(bank);
-
-		tx.commit();
-
-		em.close();
-		emf.close();
+		EntityManagerFactory factory = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			factory = Persistence.createEntityManagerFactory("infinite-finances");
+			em = factory.createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+			
+			Bank bank = getBankObject();
+			em.persist(bank);
+			
+			
+			tx.commit();
+		}catch(Exception e) {
+			tx.rollback();
+		}finally {
+			em.close();
+			factory.close();
+		}
 	}
 
 	public static Address getAddressObject() {
 		Address address = new Address();
-		address.setAddressLine1("Av Benito Juarez Nte no.11");
-		address.setAddressLine2("Rosales O-32");
-		address.setCity("Ecatepec");
-		address.setState("HG");
-		address.setZipCode("55100");
+		address.setAddressLine1("Av Acoyoacan Sur No.22");
+		address.setAddressLine2("Primaveras 25");
+		address.setCity("Miguel Hidalgo");
+		address.setState("DF");
+		address.setZipCode("43100");
 
 		return address;
 	}
@@ -78,9 +86,9 @@ public class Application {
 
 	public static Bank getBankObject() {
 		Bank bank = new Bank();
-		bank.setName("Banamex");
-		bank.setCreatedBy("Jorge Ramirez");
-		bank.setAddressType("Av Juarez Norte No.11");
+		bank.setName("Bancomer");
+		bank.setCreatedBy("Rudolfino Perez");
+		bank.setAddressType("Av Acoyoacan Sur No.22");
 		bank.setCreatedDate(LocalDateTime.now());
 		bank.setIsInternational(0);
 		bank.setLastUpdatedBy("Odin Araujo " + LocalDateTime.now());

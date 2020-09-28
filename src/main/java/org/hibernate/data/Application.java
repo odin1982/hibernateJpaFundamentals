@@ -27,19 +27,8 @@ public class Application {
 			tx.begin();
 			
 			Bank bank = em.find(Bank.class, 1L);
-			System.out.println("Existe banco: " + em.contains(bank));
-			System.out.println("Nombre del banco: " + bank.getName());
-			
-			
-//			Bank bank2 = em.find(Bank.class, 12L);
-//			System.out.println("Existe banco: " + em.contains(bank2));
-//			System.out.println("Nombre del banco: " + bank2.getName());
-			
-			//Con este metodo trae la excepcion de queno encontro la entidad
-			Bank bank3 = em.getReference(Bank.class, 12L);
-			System.out.println("Existe banco: " + em.contains(bank3));
-			System.out.println("Nombre del banco: " + bank3.getName());
-			
+			bank.setName("Banamex");
+
 			tx.commit();
 			em.close();
 			factory.close();

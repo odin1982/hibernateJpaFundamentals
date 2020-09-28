@@ -20,27 +20,30 @@ import org.hibernate.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		EntityTransaction tx = null;
 		
-		try {
-			factory = Persistence.createEntityManagerFactory("infinite-finances");
-			em = factory.createEntityManager();
-			tx = em.getTransaction();
+			EntityManagerFactory factory = Persistence.createEntityManagerFactory("infinite-finances");
+			EntityManager em = factory.createEntityManager();
+			EntityTransaction tx = em.getTransaction();
 			tx.begin();
 			
-			Bank bank = getBankObject();
-			em.persist(bank);
+			Bank bank = em.find(Bank.class, 1L);
+			System.out.println("Existe banco: " + em.contains(bank));
+			System.out.println("Nombre del banco: " + bank.getName());
 			
+			
+//			Bank bank2 = em.find(Bank.class, 12L);
+//			System.out.println("Existe banco: " + em.contains(bank2));
+//			System.out.println("Nombre del banco: " + bank2.getName());
+			
+			//Con este metodo trae la excepcion de queno encontro la entidad
+			Bank bank3 = em.getReference(Bank.class, 12L);
+			System.out.println("Existe banco: " + em.contains(bank3));
+			System.out.println("Nombre del banco: " + bank3.getName());
 			
 			tx.commit();
-		}catch(Exception e) {
-			tx.rollback();
-		}finally {
 			em.close();
 			factory.close();
-		}
+	
 	}
 
 	public static Address getAddressObject() {

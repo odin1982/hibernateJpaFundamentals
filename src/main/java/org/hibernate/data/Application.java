@@ -5,35 +5,54 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import org.hibernate.data.entities.Account;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
 import org.hibernate.data.entities.Credential;
+import org.hibernate.data.entities.Currency;
 import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
+import org.hibernate.data.entities.ids.CurrencyId;
 
 public class Application {
 
 	public static void main(String[] args) {
+		SessionFactory sessionFactory = null;
+		Session session = null;
+		Session session2 = null;
 		
-			EntityManagerFactory factory = Persistence.createEntityManagerFactory("infinite-finances");
-			EntityManager em = factory.createEntityManager();
-			EntityTransaction tx = em.getTransaction();
-			tx.begin();
+		org.hibernate.Transaction tx = null;
+		org.hibernate.Transaction tx2 = null;
+		
+		try {
+			sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			
-			Bank bank = em.find(Bank.class, 1L);
-			System.out.println(em.contains(bank));
-			em.remove(bank);
-			System.out.println(em.contains(bank));
-
+			Currency currency = new Currency();
+			currency.setCountryName("Mexico");
+			currency.setName("Peso");
+			currency.setSymbol("$");
+			
+			session.persist(currency);
 			tx.commit();
-			em.close();
-			factory.close();
+			
+			session2 = sessionFactory.openSession();
+			tx2 = session2.beginTransaction();
+			
+			Currency dbCurrency = (Currency) session2.get(Currency.class,new CurrencyId("Dollar","United States"));
+			System.out.println(dbCurrency.getName());
+			tx2.commit();
+			
+			
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			tx.rollback();
+		}
 	
 	}
 

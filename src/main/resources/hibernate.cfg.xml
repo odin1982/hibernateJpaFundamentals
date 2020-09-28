@@ -15,5 +15,6 @@
 		<mapping class="org.hibernate.data.entities.Account"/>
 		<mapping class="org.hibernate.data.entities.Transaction"/>
 		<mapping class="org.hibernate.data.entities.Budget"/>
+		<mapping class="org.hibernate.data.entities.Currency"/>
 	</session-factory>
 </hibernate-configuration>

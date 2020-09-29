@@ -16,5 +16,6 @@
 		<mapping class="org.hibernate.data.entities.Transaction"/>
 		<mapping class="org.hibernate.data.entities.Budget"/>
 		<mapping class="org.hibernate.data.entities.Currency"/>
+		<mapping class="org.hibernate.data.entities.Market"/>
 	</session-factory>
 </hibernate-configuration>

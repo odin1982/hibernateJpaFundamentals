@@ -7,22 +7,20 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import org.hibernate.data.entities.Account;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
 import org.hibernate.data.entities.Credential;
 import org.hibernate.data.entities.Currency;
+import org.hibernate.data.entities.Market;
 import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
-import org.hibernate.data.entities.ids.CurrencyId;
 
 public class Application {
 
 	public static void main(String[] args) {
 		SessionFactory sessionFactory = null;
 		Session session = null;
-		Session session2 = null;
 		
 		org.hibernate.Transaction tx = null;
 		org.hibernate.Transaction tx2 = null;
@@ -33,25 +31,26 @@ public class Application {
 			tx = session.beginTransaction();
 			
 			Currency currency = new Currency();
-			currency.setCountryName("Mexico");
-			currency.setName("Peso");
-			currency.setSymbol("$");
+			currency.setCountryName("United Kingdom");
+			currency.setName("Pound");
+			currency.setSymbol("Pound Sign");
 			
-			session.persist(currency);
+			Market market = new Market();
+			market.setMarketName("Londom Stock Exchange");
+			market.setCurrency(currency);
+			
+			session.persist(market);
 			tx.commit();
 			
-			session2 = sessionFactory.openSession();
-			tx2 = session2.beginTransaction();
-			
-			Currency dbCurrency = (Currency) session2.get(Currency.class,new CurrencyId("Dollar","United States"));
-			System.out.println(dbCurrency.getName());
-			tx2.commit();
-			
-			
+			Market dbMarket =(Market)session.get(Market.class, market.getMarketId());
+			System.out.println(dbMarket.getCurrency().getName());
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			tx.rollback();
+		}finally {
+			session.close();
+			sessionFactory.close();
 		}
 	
 	}

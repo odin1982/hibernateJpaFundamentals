@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,8 +44,13 @@ public class Account {
 	@Column(name="BANK_ID")
 	private Long bankId;
 	
+//	@Column(name="ACCOUNT_TYPE")
+//	private String accountType;
+	
+	@Enumerated(EnumType.STRING)
 	@Column(name="ACCOUNT_TYPE")
-	private String accountType;
+	private AccountType accounType;
+	
 	
 	@Column(name="NAME")
 	private String name;
@@ -88,13 +95,13 @@ public class Account {
 		this.bankId = bankId;
 	}
 
-	public String getAccountType() {
-		return accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
+//	public String getAccountType() {
+//		return accountType;
+//	}
+//
+//	public void setAccountType(String accountType) {
+//		this.accountType = accountType;
+//	}
 
 	public String getName() {
 		return name;
@@ -183,5 +190,14 @@ public class Account {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
+	
+	public AccountType getAccounType() {
+		return accounType;
+	}
+
+	public void setAccounType(AccountType accounType) {
+		this.accounType = accounType;
+	}
+
 	
 }

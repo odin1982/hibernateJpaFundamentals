@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.data.entities.Account;
+import org.hibernate.data.entities.AccountType;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
 import org.hibernate.data.entities.Credential;
@@ -30,20 +31,15 @@ public class Application {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			
-			Currency currency = new Currency();
-			currency.setCountryName("United Kingdom");
-			currency.setName("Pound");
-			currency.setSymbol("Pound Sign");
+			Account account = getAccountObject();
+			account.setAccounType(AccountType.SAVINGS);
 			
-			Market market = new Market();
-			market.setMarketName("Londom Stock Exchange");
-			market.setCurrency(currency);
-			
-			session.persist(market);
+			session.save(account);
 			tx.commit();
 			
-			Market dbMarket =(Market)session.get(Market.class, market.getMarketId());
-			System.out.println(dbMarket.getCurrency().getName());
+			Account dbAccount = (Account)session.get(Account.class,account.getAccountId());
+			System.out.println(dbAccount.getName());
+			System.out.println(dbAccount.getAccounType());
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -153,8 +149,7 @@ public class Application {
 
 	public static Account getAccountObject() {
 		Account a = new Account();
-		a.setAccountType("Perfiles");
-		a.setBankId(1L);
+		a.setBankId(2L);
 		a.setCloseDate(LocalDate.now());
 		a.setCreatedBy("odin " + LocalDate.now());
 		a.setCreatedDate(LocalDateTime.now());

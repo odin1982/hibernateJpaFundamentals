@@ -1,5 +1,6 @@
 package org.hibernate.data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,12 +9,11 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.data.entities.Account;
-import org.hibernate.data.entities.AccountType;
 import org.hibernate.data.entities.Address;
 import org.hibernate.data.entities.Bank;
+import org.hibernate.data.entities.Bond;
 import org.hibernate.data.entities.Credential;
-import org.hibernate.data.entities.Currency;
-import org.hibernate.data.entities.Market;
+import org.hibernate.data.entities.Stock;
 import org.hibernate.data.entities.Transaction;
 import org.hibernate.data.entities.User;
 
@@ -31,15 +31,24 @@ public class Application {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			
-			Account account = getAccountObject();
-			account.setAccounType(AccountType.SAVINGS);
+			Stock s = new Stock();
+			s.setIssuer("issuer");
+			s.setName("odin");
+			s.setPortfolioId(1L);
+			s.setPurchaseDate(LocalDateTime.now());
+			s.setQuantity(2L);
+			s.setSharePrice(BigDecimal.valueOf(23.5));
+			session.save(s);
 			
-			session.save(account);
-			tx.commit();
-			
-			Account dbAccount = (Account)session.get(Account.class,account.getAccountId());
-			System.out.println(dbAccount.getName());
-			System.out.println(dbAccount.getAccounType());
+			Bond b = new Bond();
+			b.setInterestRate(BigDecimal.valueOf(23.78));
+			b.setIssuer("bond issuer");
+			b.setMaturityDate(LocalDateTime.now());
+			b.setName("odin");
+			b.setPortfolioId(1L);
+			b.setPurchaseDate(LocalDateTime.now());
+			b.setValue(BigDecimal.valueOf(99.9));
+			session.save(b);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
